@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { mobile } from '../responsive';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   background: linear-gradient(
@@ -45,7 +46,7 @@ const Button = styled.button`
   cursor: pointer;
   margin-bottom: 10px;
 `;
-const Link = styled.a`
+const Links = styled.a`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -56,14 +57,15 @@ function Login() {
   return (
     <Container>
       <Wrapper>
-        <Title>CREATE AN ACCOUNT</Title>
+        <Title>LOGIN</Title>
         <Form>
           <Input placeholder=' username' />
           <Input placeholder='Password' />
 
           <Button>LOGIN</Button>
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
+
+          <Links>DO NOT YOU REMEMBER THE PASSWORD?</Links>
+          <Links>CREATE A NEW ACCOUNT</Links>
         </Form>
       </Wrapper>
     </Container>

@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Badge } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { mobile } from '../responsive';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   height: 60px;
@@ -75,13 +76,19 @@ function Navbar() {
           <Logo>LAMA.</Logo>
         </Center>
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>LOGIN</MenuItem>
-          <MenuItem>
-            <Badge badgeContent={4} color='primary'>
-              <ShoppingCartOutlinedIcon color='action' />
-            </Badge>
-          </MenuItem>
+          <Link to={'/register'}>
+            <MenuItem>REGISTER</MenuItem>
+          </Link>
+          <Link to={'/login'}>
+            <MenuItem>LOGIN</MenuItem>
+          </Link>
+          <Link to={'/cart'}>
+            <MenuItem>
+              <Badge badgeContent={4} color='primary'>
+                <ShoppingCartOutlinedIcon color='action' />
+              </Badge>
+            </MenuItem>
+          </Link>
         </Right>
       </Wrapper>
     </Container>

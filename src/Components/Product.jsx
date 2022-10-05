@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { useSelector } from 'react-redux';
 
 const Info = styled.div`
   opacity: 0;
@@ -63,24 +65,33 @@ const Icon = styled.div`
     transform: scale(1.1);
   }
 `;
-function Product({ item }) {
-  return (
-    <Container>
-      <Circle />
-      <Image src={item.img} />
-      <Info>
-        <Icon>
-          <ShoppingCartOutlinedIcon />
-        </Icon>
-        <Icon>
-          <SearchOutlinedIcon />
-        </Icon>
-        <Icon>
-          <FavoriteBorderOutlinedIcon />
-        </Icon>
-      </Info>
-    </Container>
-  );
+function Product() {
+  let navigate = useNavigate();
+  const products = useSelector((state) => state.allProducts.products);
+
+  const renderList = products.map((product) => {
+    console.log(product);
+    const { id, title, image, price, category } = product;
+    return (
+      <Container key={id} onClick={() => navigate(`/product/${id}`)}>
+        <Circle />
+
+        <Image src={image} alt={title} />
+        <Info>
+          <Icon>
+            <ShoppingCartOutlinedIcon />
+          </Icon>
+          <Icon>
+            <SearchOutlinedIcon />
+          </Icon>
+          <Icon>
+            <FavoriteBorderOutlinedIcon />
+          </Icon>
+        </Info>
+      </Container>
+    );
+  });
+  return <>{renderList}</>;
 }
 
 export default Product;

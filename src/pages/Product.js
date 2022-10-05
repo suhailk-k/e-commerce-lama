@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import Announcement from '../Components/Announcement';
 import Footer from '../Components/Footer';
@@ -7,6 +6,14 @@ import NewsLetter from '../Components/NewsLetter';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { mobile } from '../responsive';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { Params, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectedProduct,
+  removeSelectedProduct,
+} from '../redux/actions/ProductActions';
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -102,46 +109,69 @@ const Button = styled.button`
 `;
 
 function Product() {
+  const { productId } = useParams();
+  const product = useSelector((state) => state.product);
+  const { image, title, price, category, description } = product;
+  const dispatch = useDispatch();
+  console.log(product);
+  const fetchProductDetail = async () => {
+    const response = await axios
+      .get(`https://fakestoreapi.com/products/${productId}`)
+      .catch((err) => {
+        console.log('err', err);
+      });
+    dispatch(selectedProduct(response.data));
+  };
+  useEffect(() => {
+    if (productId && productId !== '') fetchProductDetail();
+    return () => {
+      dispatch(removeSelectedProduct());
+    };
+  }, [productId]);
   return (
     <Container>
       <Navbar />
       <Announcement />
-      <Wrapper>
-        <ImageContainer>
-          <Image src='https://rukminim1.flixcart.com/image/800/960/xif0q/jean/y/i/m/-original-imagagyfjxbxssgn-bb.jpeg?q=50' />
-        </ImageContainer>
-        <InfoContainer>
-          <Titile>PETER ENGLAND </Titile>
-          <Desc>Slim Men Dark Blue Jeans</Desc>
-          <Price>₹999 </Price>
-          <FilterContainer>
-            <Filter>
-              <FilterTitle>Color</FilterTitle>
-              <FilterColor color='black' />
-              <FilterColor color='darkblue' />
-              <FilterColor color='grey' />
-            </Filter>
-            <Filter>
-              <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
-              </FilterSize>
-            </Filter>
-          </FilterContainer>
-          <AddContainer>
-            <AmountContainer>
-              <RemoveIcon />
-              <Amount>1</Amount>
-              <AddIcon />
-            </AmountContainer>
-            <Button>ADD TO CART</Button>
-          </AddContainer>
-        </InfoContainer>
-      </Wrapper>
+      {Object.keys(product).length === 0 ? (
+        <div>...Loading</div>
+      ) : (
+        <Wrapper>
+          <ImageContainer>
+            <Image src={image} />
+          </ImageContainer>
+          <InfoContainer>
+            <Titile>{title}</Titile>
+            <Desc>{description}</Desc>
+            <Price>₹{price} </Price>
+            <FilterContainer>
+              <Filter>
+                <FilterTitle>Color</FilterTitle>
+                <FilterColor color='black' />
+                <FilterColor color='darkblue' />
+                <FilterColor color='grey' />
+              </Filter>
+              <Filter>
+                <FilterTitle>Size</FilterTitle>
+                <FilterSize>
+                  <FilterSizeOption>XS</FilterSizeOption>
+                  <FilterSizeOption>S</FilterSizeOption>
+                  <FilterSizeOption>M</FilterSizeOption>
+                  <FilterSizeOption>L</FilterSizeOption>
+                  <FilterSizeOption>XL</FilterSizeOption>
+                </FilterSize>
+              </Filter>
+            </FilterContainer>
+            <AddContainer>
+              <AmountContainer>
+                <RemoveIcon />
+                <Amount>1</Amount>
+                <AddIcon />
+              </AmountContainer>
+              <Button>ADD TO CART</Button>
+            </AddContainer>
+          </InfoContainer>
+        </Wrapper>
+      )}
       <NewsLetter />
       <Footer />
     </Container>
